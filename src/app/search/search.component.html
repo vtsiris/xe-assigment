@@ -1,8 +1,7 @@
 <label for="locationInput">What place are you looking for?</label>
 <div class="custom-input border">
   <img src="../../assets/images/search-solid.svg" alt="search">
-  <input id="locationInput" type="text" placeholder="North"
-         (keyup)="onKeyEnter($event)">
+  <input id="locationInput" type="text" placeholder="North" [formControl]="location">
   <img src="../../assets/images/microphone-solid.svg" alt="microphone">
 </div>
 <div class="search-results border">

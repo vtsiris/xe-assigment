@@ -1,7 +1,8 @@
-import {Component, OnDestroy, OnInit, HostListener} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ApiService} from "./services/api.service";
 import {LocationInterface} from "./services/location.response";
 import {Subscription} from "rxjs";
+import {debounceTime, tap} from "rxjs/operators";
 
 
 @Component({
@@ -24,9 +25,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   search(location: string) {
-    this.searchSubscription = this.api.searchLocation(location, this.userLang, this.getInnerWidth()).subscribe(data => {
-      this.locations = data
-    })
+    this.searchSubscription = this.api.searchLocation(location, this.userLang, this.getInnerWidth())
+      .subscribe(data => {
+        this.locations = data
+      })
   }
 
   searchLocation(location: string) {

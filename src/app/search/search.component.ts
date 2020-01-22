@@ -1,5 +1,13 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input, OnDestroy, OnInit,
+  Output,
+} from '@angular/core';
 import {LocationInterface} from "../services/location.response";
+import {FormControl} from "@angular/forms";
+import {debounceTime, tap} from "rxjs/operators";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -7,29 +15,25 @@ import {LocationInterface} from "../services/location.response";
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent {
-
+export class SearchComponent implements OnInit, OnDestroy {
   @Input() locations: LocationInterface[];
   @Output() search = new EventEmitter();
   @Output() onSearchLocation = new EventEmitter();
 
-  private selectedLocation: LocationInterface
-  private hasTimer = false;
+  location = new FormControl();
 
-  trackByFn(item, id) {
-    return item
-  }
+  private selectedLocation: LocationInterface;
+  private locationSubscription: Subscription;
 
-  onKeyEnter(event) {
-    setTimeout(() => {
-      if (this.hasTimer) {
-        return
-      }
-      this.hasTimer = true;
-      if (event.target.selectionEnd >= 2) {
-        this.search.emit(event.target.value)
-      }
-    }, 2000, this.hasTimer = false);
+  ngOnInit(): void {
+    this.location.valueChanges.pipe(
+      debounceTime(700),
+      tap(data => {
+        if (data.length >= 2) {
+          this.search.emit(data);
+        }
+      })
+    ).subscribe()
   }
 
   searchLocation() {
@@ -40,5 +44,10 @@ export class SearchComponent {
     this.selectedLocation = location;
   }
 
+  ngOnDestroy(): void {
+    if (this.locationSubscription) {
+      this.locationSubscription.unsubscribe()
+    }
+  }
 
 }
