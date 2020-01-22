@@ -15,9 +15,9 @@ div {
   }
 
   .logo {
-    width: 20%;
+    margin: 0 20px;
     float: left;
-    padding: 0 75px;
+    width: 155px;
   }
 
   .search {
@@ -26,11 +26,11 @@ div {
     margin-top: 7px;
     padding: 15px;
   }
+}
 
-  @media screen and (max-width: 1090px) {
-    .logo {
-      padding: 0 20px !important;
-    }
+@media screen and (max-width: 1000px) {
+  .logo {
+    margin: 0 !important;
   }
 }
 
@@ -72,6 +72,7 @@ div {
     }
   }
 }
+
 
 // MOBILE
 @media screen and (max-width: 479px) {
